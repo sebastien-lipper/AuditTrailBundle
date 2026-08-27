@@ -27,9 +27,7 @@ final class AuditLogAdminLocatorTest extends TestCase
             ->willReturn($log);
 
         $locator = new AuditLogAdminLocator($repository);
-        $context = AdminContext::forTesting(
-            RequestContext::forTesting(new Request(['entityId' => '42'])),
-        );
+        $context = $this->createContext(new Request(['entityId' => '42']));
 
         self::assertSame($log, $locator->loadFromContext($context));
     }
@@ -53,7 +51,7 @@ final class AuditLogAdminLocatorTest extends TestCase
         });
 
         $locator = new AuditLogAdminLocator($repository);
-        $context = AdminContext::forTesting(RequestContext::forTesting($request));
+        $context = $this->createContext($request);
 
         self::assertSame($log, $locator->loadFromContext($context));
     }
@@ -66,7 +64,7 @@ final class AuditLogAdminLocatorTest extends TestCase
 
         $locator = new AuditLogAdminLocator($repository);
 
-        self::assertNull($locator->loadFromContext(AdminContext::forTesting()));
+        self::assertNull($locator->loadFromContext($this->createContext()));
     }
 
     public function testIsUiRevertableRejectsActionsThatCannotBeRevertedFromTheUi(): void
@@ -134,6 +132,19 @@ final class AuditLogAdminLocatorTest extends TestCase
         $locator = new AuditLogAdminLocator($repository);
 
         self::assertTrue($locator->isReverted($log));
+    }
+
+    /**
+     * @return AdminContext<AuditLog>
+     */
+    private function createContext(?Request $request = null): AdminContext
+    {
+        // forTesting() binds its entity type from the CrudContext argument; these
+        // tests exercise the request side only, so none is passed.
+        /** @var AdminContext<AuditLog> $context */
+        $context = AdminContext::forTesting(RequestContext::forTesting($request));
+
+        return $context;
     }
 
     private function createAuditLog(AuditAction $action = AuditAction::Update): AuditLog
