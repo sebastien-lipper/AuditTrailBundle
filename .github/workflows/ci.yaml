@@ -34,11 +34,11 @@ jobs:
             dependencies: 'lowest'
             composer_args: '--prefer-lowest --prefer-stable --optimize-autoloader'
           - php: '8.4'
-            symfony: '8.0'
+            symfony: '8.1'
             dependencies: 'highest'
             composer_args: '--prefer-stable --optimize-autoloader'
           - php: '8.4'
-            symfony: '8.0'
+            symfony: '8.1'
             dependencies: 'lowest'
             composer_args: '--prefer-lowest --prefer-stable --optimize-autoloader'
 
@@ -125,7 +125,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        symfony: ['7.4', '8.0']
+        symfony: ['7.4', '8.1']
 
     services:
       mysql:
@@ -193,7 +193,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        symfony: ['7.4', '8.0']
+        symfony: ['7.4', '8.1']
 
     services:
       postgres:

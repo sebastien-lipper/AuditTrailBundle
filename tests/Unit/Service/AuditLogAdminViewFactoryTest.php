@@ -322,9 +322,14 @@ final class AuditLogAdminViewFactoryTest extends TestCase
      */
     private function createContext(array $query): AdminContext
     {
-        return AdminContext::forTesting(
+        // forTesting() binds its entity type from the CrudContext argument; these
+        // tests exercise the request side only, so none is passed.
+        /** @var AdminContext<AuditLog> $context */
+        $context = AdminContext::forTesting(
             RequestContext::forTesting(new Request($query)),
         );
+
+        return $context;
     }
 
     private function createViewFactory(
